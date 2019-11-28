@@ -1,0 +1,9 @@
+snap run youtube-dl -o - "https://www.youtube.com/watch?v=6nQCxwneUwA" | mpv -
+
+$ (geany >/dev/null 2>&1 &)
+
+
+update.message.reply_text
+(os.system('$(snap run youtube-dl --get-url ytsearch:'+ update.message.text.strip("/ytt ").replace(" ",""))'))
+
+https://github.com/HikingSheep/Testy_Rasbian
