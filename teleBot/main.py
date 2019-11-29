@@ -27,6 +27,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+os.system('amixer -q sset PCM 70%')
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -41,25 +42,42 @@ def help(update, context):
 +'\n'
 +'/yt + URL/search term - play song/playlist from youtube'
 +'\n'
-+'/yt_stop - stop audio playback')
++'/stop - stop audio playback'
++'\n'
++'/pasue - pause audio playback'
++'\n'
++'/cont - continue audio playback'
++'\n'
++'/play + URL - play audio from any website/link')
 
 def youtube_play(update, context):
     os.system('pkill mpv')
     update.message.reply_text('Playing...' + '\n' + update.message.text.strip("/yt "))
     URL = update.message.text.strip("/yt ").replace(" ","").encode('utf-8')
-    os.system('$(snap run youtube-dl -o - ytsearch:'+ URL +' | mpv - >/dev/null 2>&1 &)')
-    
+    os.system('$(youtube-dl -o - ytsearch:'+ URL +' | mpv --no-video - >/dev/null 2>&1 &)')
 
-#def youtube_play(update, context):
-#    os.system('pkill mpv')
-#    URL = update.message.text.strip("/yt ").replace(" ","")
-#    os.system('$(snap run youtube-dl -o - '+ URL +' | mpv - >/dev/null 2>&1 &')
-#    update.message.reply_text('Playing..')
-    
+def play_other(update, context):
+    os.system('pkill mpv')
+    update.message.reply_text('Playing...' + '\n' + update.message.text.strip("/play "))
+    URL = update.message.text.strip("/play").replace(" ","").encode('utf-8')
+    os.system('$(mpv --no-video ' + URL + ' >/dev/null 2>&1 &)')
 
-def youtube_stop(update, context):
+def pause_playback(update, context):
+    update.message.reply_text('Pause...')
+    os.system('pkill mpv -STOP')
+
+def continue_playback(update, context):
+    update.message.reply_text('Continuing...')
+    os.system('pkill mpv -CONT')
+
+def stop_playback(update, context):
     update.message.reply_text('Stopping...')
     os.system('pkill mpv')
+
+def volume(update, context):
+    update.message.reply_text('Changing to...' + '\n' + update.message.text.strip("/volume ").replace(" ","").replace("%",""))
+    value = update.message.text.strip("/volume ").replace(" ","").replace("%","")
+    os.system('amixer -q sset PCM ' + value + '%')
  
 def echo(update, context):
     """Echo the user message."""
@@ -76,7 +94,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("991503763:AAH5mpYGYNmblr-p3f715Kt6Foay-JKmQ6Q", use_context=True)
+    updater = Updater("", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -84,8 +102,14 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+
     dp.add_handler(CommandHandler("yt", youtube_play))
-    dp.add_handler(CommandHandler("yt_stop", youtube_stop))
+    dp.add_handler(CommandHandler("play", play_other))
+    dp.add_handler(CommandHandler("volume", volume))
+
+    dp.add_handler(CommandHandler("stop", stop_playback))
+    dp.add_handler(CommandHandler("pause", pause_playback))
+    dp.add_handler(CommandHandler("cont", continue_playback))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
