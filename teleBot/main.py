@@ -18,9 +18,11 @@ bot.
 import logging
 import os
 import time
+import requests
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
+from spotify import get_playlist
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -41,7 +43,7 @@ def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!'
 +'\n'
-+'/yt + URL/search term - play song/playlist from youtube'
++'/yt + URL/keywords - play song/playlist from youtube'
 +'\n'
 +'/stop - stop audio playback'
 +'\n'
@@ -51,7 +53,9 @@ def help(update, context):
 +'\n'
 +'/volume + INT (e.g. 50 = 50%) - chnage volume to INT'
 +'\n'
-+'/play + URL - play audio from any website/link')
++'/play + URL - play audio from any website/link'
++'\n'
++'/sp + keywords - find a playlist on spotify')
 
 def youtube_play(update, context):
     os.system('pkill mpv')
@@ -109,6 +113,10 @@ def document(update, context):
     newFile = update.message.document.get_file()
     newFile.download(FileID)
     update.message.reply_text('Hmmm... Uploaded -_-')
+
+def spotify(update, context):
+     keyword = update.message.text.strip("/sp ")
+     update.message.reply_text('Enjoy your playlist!\n' + get_playlist(keyword))
  
 
 def echo(update, context):
@@ -142,6 +150,8 @@ def main():
     dp.add_handler(CommandHandler("stop", stop_playback))
     dp.add_handler(CommandHandler("pause", pause_playback))
     dp.add_handler(CommandHandler("cont", continue_playback))
+
+    dp.add_handler(CommandHandler("sp", spotify)) 
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
