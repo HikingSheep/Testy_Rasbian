@@ -19,7 +19,8 @@ import logging
 import os
 import time
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -48,13 +49,15 @@ def help(update, context):
 +'\n'
 +'/cont - continue audio playback'
 +'\n'
++'/volume + INT (e.g. 50 = 50%) - chnage volume to INT'
++'\n'
 +'/play + URL - play audio from any website/link')
 
 def youtube_play(update, context):
     os.system('pkill mpv')
     update.message.reply_text('Playing...' + '\n' + update.message.text.strip("/yt "))
     URL = update.message.text.strip("/yt ").replace(" ","").encode('utf-8')
-    os.system('$(youtube-dl -o - ytsearch:'+ URL +' | mpv --no-video - >/dev/null 2>&1 &)')
+    os.system('$(snap run youtube-dl -o - ytsearch:'+ URL +' | mpv --no-video - >/dev/null 2>&1 &)')
 
 def play_other(update, context):
     os.system('pkill mpv')
@@ -78,7 +81,36 @@ def volume(update, context):
     update.message.reply_text('Changing to...' + '\n' + update.message.text.strip("/volume ").replace(" ","").replace("%",""))
     value = update.message.text.strip("/volume ").replace(" ","").replace("%","")
     os.system('amixer -q sset PCM ' + value + '%')
+
+def voice(update, context):
+    FileID = update.message.voice.file_id
+    print (FileID)
+    newFile = update.message.voice.get_file()
+    newFile.download(FileID)
+    update.message.reply_text('Hmmm... Uploaded -_-')
+
+def photo(update, context):
+    FileID = update.message.photo[-1].file_id
+    print (FileID)
+    newFile = update.message.photo[-1].get_file()
+    newFile.download(FileID)
+    update.message.reply_text('Hmmm... Uploaded -_-')
+
+def video(update, context):
+    FileID = update.message.video.file_id
+    print (FileID)
+    newFile = update.message.video.get_file()
+    newFile.download(FileID)
+    update.message.reply_text('Hmmm... Uploaded -_-')
+
+def document(update, context):
+    FileID = update.message.document.file_id
+    print (FileID)
+    newFile = update.message.document.get_file()
+    newFile.download(FileID)
+    update.message.reply_text('Hmmm... Uploaded -_-')
  
+
 def echo(update, context):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
@@ -113,6 +145,10 @@ def main():
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
+    dp.add_handler(MessageHandler(Filters.photo, photo))
+    dp.add_handler(MessageHandler(Filters.voice, voice))
+    dp.add_handler(MessageHandler(Filters.video, video))
+    dp.add_handler(MessageHandler(Filters.document, document))
 
     # log all errors
     dp.add_error_handler(error)
