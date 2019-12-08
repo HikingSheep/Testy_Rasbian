@@ -11,11 +11,13 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 ### Youtube
 
 ```/yt + URL/keywords``` - play a song from youtube
+
 ```/yt_playlist + URL [under_dev]``` - play a playlist from youtube
 
 ### Spotify
 
 ```/sp + keywords [under_dev]``` - find a track on spotify
+
 ```/sp_playlist + keywords``` - find a playlist on spotify
 
 ### Playback
