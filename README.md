@@ -41,7 +41,6 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 /dw + /location(folder name)/file name - download specified file
 
 
-**_/play function was tested only on youtube, vk, vimeo
-Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player_**
-
-**_Drop images, video or documents in chat to upload them to the host machine. Can be viewed through /ls command after they are uploaded_**
+>_/play function was tested only on youtube, vk, vimeo
+Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player_
+>_Drop images, video or documents in chat to upload them to the host machine. Can be viewed through /ls command after they are uploaded_
