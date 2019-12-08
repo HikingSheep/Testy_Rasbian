@@ -10,7 +10,7 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ### Youtube
 
-'''/yt + URL/keywords''' - play a song from youtube
+```/yt + URL/keywords``` - play a song from youtube
 /yt_playlist + URL [under_dev] - play a playlist from youtube
 
 ### Spotify
