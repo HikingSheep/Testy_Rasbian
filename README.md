@@ -23,8 +23,11 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 ### Playback
 
 ```/play + URL``` - play audio from any website/link
+
 ```/pasue``` - pause audio playback
+
 ```/cont``` - continue audio playback
+
 ```/stop``` - stop audio playback
 
 >_```/play``` function was tested only on youtube, vk, vimeo._
@@ -34,6 +37,7 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 ### Volume
 
 ```/volume + INT (e.g. 50 = 50%)``` - change volume to INT
+
 ```/cur_volume``` - get current volume
 
 ### DuckDuckGo
@@ -43,7 +47,9 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 ### File System
 
 ```/ls``` - list available file system directories
+
 ```/ls + available folder name``` - list files in the specified folder
+
 ```/dw + /location(folder name)/file name``` - download specified file
 
 
