@@ -1,23 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# This program is dedicated to the public domain under the CC0 license.
-
-"""
-Simple Bot to reply to Telegram messages.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
 
 import logging
 import os
 import string
+import duckduckgo
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from spotify import get_playlist, get_track
@@ -32,13 +19,13 @@ os.system('pulseaudio --start && amixer -D pulse sset Master 50%')
 
 class saddness:
     vol = "50"
-    temp = "/home/pi/Desktop/Testy_Rasbian/teleBot"
+    temp = "/home/pi/Testy_Rasbian/teleBot"
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    update.message.reply_text('Hi, Meatbag!')
 
 
 def help(update, context):
@@ -61,6 +48,9 @@ def help(update, context):
 +'Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player \n \n'
 +'***Drop images, video or documents in chat to upload them to the host machine \n')
 
+
+####Youtube
+
 def youtube_play(update, context):
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
@@ -79,6 +69,21 @@ def youtube_play_playlist(update, context):
     update.message.reply_text('Playing playlist... \n' + song_name.read())
     song_name.close()
     #os.system('youtube-dl --skip-unavailable-fragments --yes-playlist -i -o - '+ URL +' | mpv --no-video - ')
+    #fetch list -> download into folder -> play playlist? limit to downloads (5,10,15)?
+    #if yes -> additional controls for playback?
+
+####Spotify
+
+def spotify_playlist(update, context):
+    keyword = update.message.text.strip("/sp_playlist ").encode('utf-8')
+    update.message.reply_text('Enjoy your playlist! \n' + get_playlist(str(keyword)))
+
+def spotify_track(update, context):
+    keyword = update.message.text.strip("/sp ").replace(" ","").encode('utf-8')
+    update.message.reply_text('Enjoy your track! \n [under dev]')
+    #search for the track using keywords -> retrieve ID -> provide ID to the user
+
+####Play other
 
 
 def play_other(update, context):
@@ -86,6 +91,9 @@ def play_other(update, context):
     update.message.reply_text('Playing... \n' + update.message.text.strip("/play "))
     URL = update.message.text.strip("/play").replace(" ","").encode('utf-8')
     os.system('$(mpv --no-video ' + URL + ' >/dev/null 2>&1 &)')
+
+
+####Playback options 
 
 def pause_playback(update, context):
     update.message.reply_text('Pause...')
@@ -99,6 +107,8 @@ def stop_playback(update, context):
     update.message.reply_text('Stopping...')
     os.system('pkill mpv')
 
+####Volume
+
 def volume(update, context):
     update.message.reply_text('Changing to... \n' + update.message.text.strip("/volume ").replace(" ","") + '%')
     saddness.vol = update.message.text.strip("/volume ").replace(" ","").replace("%","")
@@ -107,13 +117,18 @@ def volume(update, context):
 def volume_cur(update, context):
     update.message.reply_text(saddness.vol + '%')
 
-def spotify_playlist(update, context):
-    keyword = update.message.text.strip("/sp_playlist ").encode('utf-8')
-    update.message.reply_text('Enjoy your playlist! \n' + get_playlist(str(keyword)))
+####DuckDuckGo
 
-def spotify_track(update, context):
-    keyword = update.message.text.strip("/sp ").replace(" ","").encode('utf-8')
-    update.message.reply_text('Enjoy your track! \n [under dev]') #+ get_track(str(keyword)))
+def search(update, context):
+    query = update.message.text.strip("/q ").encode('utf-8')
+    update.message.reply_text(duckduckgo.get_zci(query))
+    print (duckduckgo.get_zci(query))
+
+####IMD
+
+    ###TODO
+
+####Random
  
 
 def echo(update, context):
@@ -181,7 +196,7 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("hi", start))
     dp.add_handler(CommandHandler("help", help))
 
     dp.add_handler(CommandHandler("yt", youtube_play))
@@ -199,6 +214,8 @@ def main():
 
     dp.add_handler(CommandHandler("ls", show_media))
     dp.add_handler(CommandHandler("dw", download_media))
+
+    dp.add_handler(CommandHandler("q", search))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
