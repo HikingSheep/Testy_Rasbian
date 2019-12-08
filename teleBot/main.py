@@ -124,7 +124,7 @@ def search(update, context):
     update.message.reply_text(duckduckgo.get_zci(query))
     print (duckduckgo.get_zci(query))
 
-####IMD
+####IMDb
 
     ###TODO
 
@@ -139,6 +139,10 @@ def echo(update, context):
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+def git(update, context):
+    """Returns projects git repository"""
+    update.message.reply_text("https://github.com/HikingSheep/Testy_Rasbian")
 
 
 ####File System
@@ -190,7 +194,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("991503763:AAH5mpYGYNmblr-p3f715Kt6Foay-JKmQ6Q", use_context=True)
+    updater = Updater("", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -216,6 +220,7 @@ def main():
     dp.add_handler(CommandHandler("dw", download_media))
 
     dp.add_handler(CommandHandler("q", search))
+    dp.add_handler(CommandHandler("git", git))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
