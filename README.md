@@ -25,7 +25,7 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 ```/cont``` - continue audio playback
 ```/stop``` - stop audio playback
 
->_/play function was tested only on youtube, vk, vimeo
+>_```/play``` function was tested only on youtube, vk, vimeo
 Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player_
 
 ### Volume
