@@ -9,13 +9,14 @@ client_credentials_manager = SpotifyClientCredentials(SPOTIPY_CLIENT_ID,SPOTIPY_
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def get_playlist(keyword):
-    playlist_list = sp.search(str(keyword), limit=10, offset=5, type='playlist', market='SG')['playlists']['items']
+    playlist_list = sp.search(str(keyword), limit=10, offset=0, type='playlist', market='SG')['playlists']['items']
     
     for pl in playlist_list:
         if pl['public'] is None or pl['public'] == True:
             return pl['external_urls']['spotify']
 
 def get_track(keyword):
-    playlist_list = sp.search(keyword, limit=1, type='track')['items']
-    
-    return str(playlist_list)
+    track = sp.search(keyword, limit=5, offset=0, type='track', market='SG')['tracks']['items']
+
+    for t in track:
+         return t['external_urls']['spotify']

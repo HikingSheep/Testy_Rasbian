@@ -15,35 +15,36 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-os.system('pulseaudio --start && amixer -D pulse sset Master 50%')
-
 class saddness:
     vol = "50"
     temp = "/home/pi/Testy_Rasbian/teleBot"
+    playlist_int = '1-15'
 
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
+
+os.system('pulseaudio --start && amixer -D pulse sset Master 50% && aplay ' + saddness.temp + '/media/.bot_media/start.wav && aplay ' + saddness.temp + '/start.wav')
+
+
 def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi, Meatbag!')
-
+    os.system('aplay '+ saddness.temp + '/function.wav && aplay ' + saddness.temp + '/media/.bot_media/function.wav')
+    print(update.message.reply_text('Hi, Meatbag!'))
 
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help! \n'
 +'/yt + URL/keywords - play a song from youtube \n'
-+'/yt_playlist + URL [under_dev] - play a playlist from youtube \n'
++'/yt_playlist + URL - play a playlist from youtube \n'
 +'/stop - stop audio playback \n'
 +'/pasue - pause audio playback \n'
 +'/cont - continue audio playback \n'
 +'/volume + INT (e.g. 50 = 50%) - change volume to INT \n'
 +'/cur_volume - get current volume\n'
 +'/play + URL - play audio from any website/link \n'
-+'/sp + keywords [under_dev] - find a track on spotify \n'
++'/sp + keywords - find a track on spotify \n'
 +'/sp_playlist + keywords - find a playlist on spotify \n \n'
 +'/ls - list available file system directories \n'
 +'/ls + available folder name - list files in the specified folder \n'
 +'/dw + /location/file name - download specified file \n \n'
++'/git - request git repository link \n \n'
 +'**/play function was tested only on youtube, vk, vimeo \n'
 +'Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player \n \n'
 +'***Drop images, video or documents in chat to upload them to the host machine \n')
@@ -63,14 +64,22 @@ def youtube_play(update, context):
 
 def youtube_play_playlist(update, context):
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
-    os.system('pkill mpv')
+    os.system('pkill mpv && rm ' + saddness.temp + '/media/.playlist/*.webm')
     URL = update.message.text.strip("/yt_playlist ").replace(" ","").encode('utf-8')
     os.system('youtube-dl --get-title '+ URL +' > ' + saddness.temp + '/temp/name.txt')
     update.message.reply_text('Playing playlist... \n' + song_name.read())
     song_name.close()
-    #os.system('youtube-dl --skip-unavailable-fragments --yes-playlist -i -o - '+ URL +' | mpv --no-video - ')
-    #fetch list -> download into folder -> play playlist? limit to downloads (5,10,15)?
-    #if yes -> additional controls for playback?
+    update.message.reply_text('Downloading... Please wait')
+    os.system('$(youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s-%(id)s.%(ext)s" -f bestaudio' + URL+ ' >/dev/null 2>&1 &)')
+    update.message.reply_text('Playing...')
+    os.system('$(mpv --playlist ' + URL + 'media/.playlist/ >/dev/null 2>&1 &)')
+
+def youtube_playlist_int_cur(update, context):
+    update.message.reply_text(saddness.playlist_int)
+
+def youtube_playlist_int_set(update, context):
+    update.message.reply_text('Changing to... \n' + update.message.text.strip("/yt_playlist_int_set ").replace(" ",""))
+    saddness.playlist_int = update.message.text.strip("/yt_playlist_int_set ").replace(" ","")
 
 ####Spotify
 
@@ -79,9 +88,8 @@ def spotify_playlist(update, context):
     update.message.reply_text('Enjoy your playlist! \n' + get_playlist(str(keyword)))
 
 def spotify_track(update, context):
-    keyword = update.message.text.strip("/sp ").replace(" ","").encode('utf-8')
-    update.message.reply_text('Enjoy your track! \n [under dev]')
-    #search for the track using keywords -> retrieve ID -> provide ID to the user
+    keyword = update.message.text.strip("/sp ").encode('utf-8')
+    update.message.reply_text('Enjoy your track! \n' + get_track(keyword))
 
 ####Play other
 
@@ -200,11 +208,14 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("hi", start))
+
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("hi", start))
 
     dp.add_handler(CommandHandler("yt", youtube_play))
     dp.add_handler(CommandHandler("yt_playlist", youtube_play_playlist))
+    dp.add_handler(CommandHandler("yt_playlist_int_cur", youtube_playlist_int_cur))
+    dp.add_handler(CommandHandler("yt_playlist_int_set", youtube_playlist_int_set))
     dp.add_handler(CommandHandler("play", play_other))
     dp.add_handler(CommandHandler("volume", volume))
     dp.add_handler(CommandHandler("cur_volume", volume_cur))
