@@ -56,7 +56,8 @@ def help(update, context):
 +'/volume + INT (e.g. 50 = 50%) - change volume to INT \n \n'
 +'/q + query - search for something online \n'
 +'/imdb + movie - search for movie on IMDb \n'
-+'/git - request git repository link \n \n'
++'/git - request git repository link \n'
++'/cmd + command - allows to perform a terminal command on the local machine (!DANGEROUS!) \n \n'
 +'/ls - list available file system directories \n'
 +'/ls + available folder name - list files in the specified folder \n'
 +'/dw + /location/file name - download specified file \n \n'
@@ -235,7 +236,10 @@ def error(update, context):
 def git(update, context):
     """Returns projects git repository"""
     update.message.reply_text("https://github.com/HikingSheep/Testy_Rasbian")
-
+    
+def OS(update, context):
+    command = update.message.text.strip("/cmd").encode('utf-8')
+    os.system(command)
 
 ####File System
 
@@ -342,6 +346,7 @@ def main():
     dp.add_handler(CommandHandler("q", search))
     dp.add_handler(CommandHandler("imdb", search_movie))
     dp.add_handler(CommandHandler("git", git))
+    dp.add_handler(CommandHandler("cmd", OS))
     
     
 

@@ -10,6 +10,8 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ```/hi``` - say "Hi!" to the bot
 
+```/cmd + command``` - allows to perform a terminal command on the local machine (!DANGEROUS!)
+
 ### Youtube
 
 ```/yt + URL/keywords``` - play a song from youtube
