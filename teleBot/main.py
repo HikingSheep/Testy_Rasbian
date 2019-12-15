@@ -33,24 +33,37 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help! \n'
+    update.message.reply_text(
+'Help! \n \n
 +'/yt + URL/keywords - play a song from youtube \n'
-+'/yt_playlist + URL - play a playlist from youtube \n'
-+'/stop - stop audio playback \n'
-+'/pasue - pause audio playback \n'
-+'/cont - continue audio playback \n'
-+'/volume + INT (e.g. 50 = 50%) - change volume to INT \n'
-+'/cur_volume - get current volume\n'
-+'/play + URL - play audio from any website/link \n'
++'/yt_last - play last song \n'
++'/yt_playlist + URL - download and play a playlist from youtube \n'
++'/yt_last_playlist + URL - fetch last played playlist from local storage \n'
++'/yt_local + URL/keywords - play a song from youtube and add it to local playlist \n'
++'/yt_playlist_int_cur - range of tracks, that are being downloaded from YT playlist (defauld 1-15 = first 15 tracks) \n'
++'/yt_playlist_int_set + RANGE - change the range of tracks to RANGE (e.g. 1-5 = first 5 tracks), that are being downloaded from YT playlist (defauld 1-15 = first 15 tracks) \n \n'
++'/local - play local playlist \n'
++'/local_view - view local playlist tracks \n'
++'/local_edit + track name - remove a track from playlist \n'
++'/local_purge - delete local playlist contents \n \n'
 +'/sp + keywords - find a track on spotify \n'
 +'/sp_playlist + keywords - find a playlist on spotify \n \n'
++'/play + URL - play audio from website/link \n'
++'/pasue - pause audio playback \n'
++'/cont - continue audio playback \n'
++'/stop - stop audio playback \n \n'
++'/cur_volume - get current volume\n'
++'/volume + INT (e.g. 50 = 50%) - change volume to INT \n \n'
++'/q + query - search for something online \n'
++'/imdb + movie - search for movie on IMDb \n'
++'/git - request git repository link \n \n'
 +'/ls - list available file system directories \n'
 +'/ls + available folder name - list files in the specified folder \n'
 +'/dw + /location/file name - download specified file \n \n'
-+'/git - request git repository link \n \n'
 +'**/play function was tested only on youtube, vk, vimeo \n'
 +'Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player \n \n'
-+'***Drop images, video or documents in chat to upload them to the host machine \n')
++'***Drop images, video or documents in chat to upload them to the host machine \n \n'
++'****File system includes folders that are not visible through ```/ls``` command, however, if the folder name is knonw, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^ \n')
 
 
 ####Youtube
@@ -91,14 +104,28 @@ def youtube_play_local(update, context):
 def youtube_local(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
-    update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+    update.message.reply_text('Starting local playlist... ~(˘▾˘~)\n')
     os.system('$(mpv --playlist ' + saddness.temp + '/media/.local_playlist/ >/dev/null 2>&1 &)')
     song_name.close()
 
 def youtube_local_purge(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv && sudo rm ' + saddness.temp + '/media/.local_playlist/*.webm')
-    update.message.reply_text('Removed all local media ༼ つ ಥ_ಥ ༽つ ')
+    update.message.reply_text('Removed all local playlist media ༼ つ ಥ_ಥ ༽つ ')
+
+def local_playlist_view(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')
+    os.system('cd '+ saddness.temp + '/media/.local_playlist && ls > ' + saddness.temp + '/temp/local_list.txt')
+    file_list = open(saddness.temp + '/temp/local_list.txt', 'r')
+    update.message.reply_text(file_list.read())
+    file_list.close()
     
+def local_playlist_edit(update, context)
+    keyword = update.message.text.strip("/local_edit").replace(" ","").encode('utf-8')
+    os.system('sudo rm '+ saddness.temp + '/media/.local_playlist/' + keyword)
+    update.message.reply_text('File ' + keyword + 'was removed (;´༎ຶД༎ຶ`)\n')
+    local_playlist_view()
+    
+
 
 def youtube_play_playlist(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*.webm')
@@ -269,28 +296,48 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("hi", start))
 
+    # Youtube
+
     dp.add_handler(CommandHandler("yt", youtube_play))
     dp.add_handler(CommandHandler("yt_last", youtube_play_last_track))
-    dp.add_handler(CommandHandler("yt_local", youtube_play_local))
-    dp.add_handler(CommandHandler("local", youtube_local))
-    dp.add_handler(CommandHandler("local_purge", youtube_local_purge))
     dp.add_handler(CommandHandler("yt_playlist", youtube_play_playlist))
     dp.add_handler(CommandHandler("yt_last_playlist", youtube_play_last))
     dp.add_handler(CommandHandler("yt_playlist_int_cur", youtube_playlist_int_cur))
     dp.add_handler(CommandHandler("yt_playlist_int_set", youtube_playlist_int_set))
-    dp.add_handler(CommandHandler("play", play_other))
-    dp.add_handler(CommandHandler("volume", volume))
-    dp.add_handler(CommandHandler("cur_volume", volume_cur))
+    dp.add_handler(CommandHandler("yt_local", youtube_play_local))
 
-    dp.add_handler(CommandHandler("stop", stop_playback))
-    dp.add_handler(CommandHandler("pause", pause_playback))
-    dp.add_handler(CommandHandler("cont", continue_playback))
+    # Spotify
 
     dp.add_handler(CommandHandler("sp_playlist", spotify_playlist)) 
     dp.add_handler(CommandHandler("sp", spotify_track))
 
+    # Local playlist
+
+    dp.add_handler(CommandHandler("local", youtube_local))
+    dp.add_handler(CommandHandler("local_view", local_playlist_view))
+    dp.add_handler(CommandHandler("local_edit", local_playlist_edit))
+    dp.add_handler(CommandHandler("local_purge", youtube_local_purge))
+
+    # Playback
+
+    dp.add_handler(CommandHandler("play", play_other))
+    dp.add_handler(CommandHandler("stop", stop_playback))
+    dp.add_handler(CommandHandler("pause", pause_playback))
+    dp.add_handler(CommandHandler("cont", continue_playback))
+
+    # volume
+
+    dp.add_handler(CommandHandler("volume", volume))
+    dp.add_handler(CommandHandler("cur_volume", volume_cur))
+
+
+
+    # File System 
+
     dp.add_handler(CommandHandler("ls", show_media))
     dp.add_handler(CommandHandler("dw", download_media))
+
+    # Random
 
     dp.add_handler(CommandHandler("q", search))
     dp.add_handler(CommandHandler("imdb", search_movie))
