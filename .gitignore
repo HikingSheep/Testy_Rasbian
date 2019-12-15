@@ -35,3 +35,11 @@
 *.wav
 *.wma
 
+#else
+*.zip
+*.rar
+*.7z
+*.doc
+*.txt
+*.pdf
+

@@ -5,15 +5,18 @@ import logging
 import os
 import string
 import duckduckgo
+import imdb
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from spotify import get_playlist, get_track
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+ia = imdb.IMDb()
 
 class saddness:
     vol = "50"
@@ -21,12 +24,12 @@ class saddness:
     playlist_int = '1-15'
 
 
-os.system('pulseaudio --start && amixer -D pulse sset Master 50% && aplay ' + saddness.temp + '/media/.bot_media/start.wav && aplay ' + saddness.temp + '/start.wav')
+os.system('pulseaudio --start && amixer -D pulse sset Master 50% && aplay ' + saddness.temp + '/media/.bot_media/start.wav')
 
 
 def start(update, context):
-    os.system('aplay '+ saddness.temp + '/function.wav && aplay ' + saddness.temp + '/media/.bot_media/function.wav')
-    print(update.message.reply_text('Hi, Meatbag!'))
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    update.message.reply_text('Hi, Meatbag!')
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -53,27 +56,72 @@ def help(update, context):
 ####Youtube
 
 def youtube_play(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.track/*.webm')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt ").replace(" ","").encode('utf-8')
-    os.system('$(youtube-dl -f worst -o - ytsearch:' + URL + '| mpv --no-video - >/dev/null 2>&1 &)'
+    URL = update.message.text.strip("/yt").replace(" ","").encode('utf-8')
+    os.system('$(youtube-dl -f bestaudio -o - ytsearch:' + URL + '| mpv --no-video - >/dev/null 2>&1 &)'
++' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s-%(id)s.%(ext)s" -f bestaudio ytsearch:' + URL
 +' && youtube-dl --get-title ytsearch:' + URL + ' > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:' + URL + ' >> ' + saddness.temp + '/temp/name.txt')
-    update.message.reply_text('Playing... \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+    update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
     song_name.close()
+    
+def youtube_play_last_track(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    song_name = open(saddness.temp + '/temp/name.txt', 'r') 
+    update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+    os.system('$(mpv --playlist ' + saddness.temp + '/media/.track/ >/dev/null 2>&1 &)')
+    song_name.close()
+    
+    
+    
+def youtube_play_local(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    song_name = open(saddness.temp + '/temp/name.txt', 'r') 
+    os.system('pkill mpv')
+    URL = update.message.text.strip("/yt_local").replace(" ","").encode('utf-8')
+    os.system('$(youtube-dl -f bestaudio -o - ytsearch:' + URL + '| mpv --no-video - >/dev/null 2>&1 &)'
++' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s-%(id)s.%(ext)s" -f bestaudio ytsearch:' + URL
++' && youtube-dl --get-title ytsearch:' + URL + ' > ' + saddness.temp + '/temp/name.txt' 
++' && youtube-dl --get-id ytsearch:' + URL + ' >> ' + saddness.temp + '/temp/name.txt')
+    update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+    song_name.close()
+    
+def youtube_local(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')
+    song_name = open(saddness.temp + '/temp/name.txt', 'r') 
+    update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+    os.system('$(mpv --playlist ' + saddness.temp + '/media/.local_playlist/ >/dev/null 2>&1 &)')
+    song_name.close()
+
+def youtube_local_purge(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv && sudo rm ' + saddness.temp + '/media/.local_playlist/*.webm')
+    update.message.reply_text('Removed all local media ༼ つ ಥ_ಥ ༽つ ')
+    
 
 def youtube_play_playlist(update, context):
-    song_name = open(saddness.temp + '/temp/name.txt', 'r') 
-    os.system('pkill mpv && rm ' + saddness.temp + '/media/.playlist/*.webm')
-    URL = update.message.text.strip("/yt_playlist ").replace(" ","").encode('utf-8')
-    os.system('youtube-dl --get-title '+ URL +' > ' + saddness.temp + '/temp/name.txt')
-    update.message.reply_text('Playing playlist... \n' + song_name.read())
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*.webm')
+    update.message.reply_text('Fetching playlist data...')
+    song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
+    os.system('pkill mpv')
+    URL = update.message.text.strip("/yt_playlist").replace(" ","").encode('utf-8')
+    os.system('$(youtube-dl --get-title '+ URL +' > ' + saddness.temp + '/temp/playlist.txt >/dev/null 2>&1 &)')
+    update.message.reply_text(song_name.read())
     song_name.close()
-    update.message.reply_text('Downloading... Please wait')
-    os.system('$(youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s-%(id)s.%(ext)s" -f bestaudio' + URL+ ' >/dev/null 2>&1 &)')
-    update.message.reply_text('Playing...')
-    os.system('$(mpv --playlist ' + URL + 'media/.playlist/ >/dev/null 2>&1 &)')
+    update.message.reply_text('Downloading... Please wait \n')
+    os.system('$(youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s-%(id)s.%(ext)s" -f bestaudio ' + URL + ' >/dev/null 2>&1 &)')
+    update.message.reply_text('Playing... (~˘▾˘)~ \n')
+    os.system('$(mpv --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
 
+def youtube_play_last(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')  
+    song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
+    update.message.reply_text('Fetching playlist data... \n \n' + song_name.read())
+    song_name.close()
+    update.message.reply_text('Playing... (~˘▾˘)~\n')
+    os.system('$(mpv --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
+    
 def youtube_playlist_int_cur(update, context):
     update.message.reply_text(saddness.playlist_int)
 
@@ -95,6 +143,7 @@ def spotify_track(update, context):
 
 
 def play_other(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
     update.message.reply_text('Playing... \n' + update.message.text.strip("/play "))
     URL = update.message.text.strip("/play").replace(" ","").encode('utf-8')
@@ -104,20 +153,24 @@ def play_other(update, context):
 ####Playback options 
 
 def pause_playback(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Pause...')
     os.system('pkill mpv -STOP')
 
 def continue_playback(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Continuing...')
     os.system('pkill mpv -CONT')
 
 def stop_playback(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Stopping...')
     os.system('pkill mpv')
 
 ####Volume
 
 def volume(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Changing to... \n' + update.message.text.strip("/volume ").replace(" ","") + '%')
     saddness.vol = update.message.text.strip("/volume ").replace(" ","").replace("%","")
     os.system('amixer -D pulse sset Master ' + saddness.vol + '%')
@@ -134,7 +187,11 @@ def search(update, context):
 
 ####IMDb
 
-    ###TODO
+def search_movie(update, context):
+    keyword = update.message.text.strip("/imdb ").encode('utf-8')
+    movies = ia.search_movie(keyword)
+    url = ia.get_imdbURL(movies[0])
+    update.message.reply_text(str(movies[0]['title']) + '\n https://www.imdb.com/title/tt' + str(movies[0].movieID))
 
 ####Random
  
@@ -172,28 +229,28 @@ def voice(update, context):
     print (FileID)
     newFile = update.message.voice.get_file()
     newFile.download(saddness.temp + "/media/audio/" + FileID + '.mp3')
-    update.message.reply_text('Hmmm... Uploaded -_-')
+    update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def photo(update, context):
     FileID = update.message.photo[-1].file_id[40:]
     print (FileID)
     newFile = update.message.photo[-1].get_file()
     newFile.download(saddness.temp + "/media/image/" + FileID + '.jpg')
-    update.message.reply_text('Hmmm... Uploaded -_-')
+    update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def video(update, context):
     FileID = update.message.video.file_id[20:]
     print (FileID)
     newFile = update.message.video.get_file()
     newFile.download(saddness.temp + "/media/video/" + FileID + '.mp4')
-    update.message.reply_text('Hmmm... Uploaded -_-')
+    update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def document(update, context):
     FileID = update.message.document.file_id[20:]
     print (FileID)
     newFile = update.message.document.get_file()
     newFile.download(saddness.temp + "/media/document/" + FileID)
-    update.message.reply_text('Hmmm... Uploaded -_-')
+    update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 ####
 
@@ -213,7 +270,12 @@ def main():
     dp.add_handler(CommandHandler("hi", start))
 
     dp.add_handler(CommandHandler("yt", youtube_play))
+    dp.add_handler(CommandHandler("yt_last", youtube_play_last_track))
+    dp.add_handler(CommandHandler("yt_local", youtube_play_local))
+    dp.add_handler(CommandHandler("local", youtube_local))
+    dp.add_handler(CommandHandler("local_purge", youtube_local_purge))
     dp.add_handler(CommandHandler("yt_playlist", youtube_play_playlist))
+    dp.add_handler(CommandHandler("yt_last_playlist", youtube_play_last))
     dp.add_handler(CommandHandler("yt_playlist_int_cur", youtube_playlist_int_cur))
     dp.add_handler(CommandHandler("yt_playlist_int_set", youtube_playlist_int_set))
     dp.add_handler(CommandHandler("play", play_other))
@@ -231,7 +293,10 @@ def main():
     dp.add_handler(CommandHandler("dw", download_media))
 
     dp.add_handler(CommandHandler("q", search))
+    dp.add_handler(CommandHandler("imdb", search_movie))
     dp.add_handler(CommandHandler("git", git))
+    
+    
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
