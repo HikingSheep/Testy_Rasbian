@@ -21,6 +21,7 @@ ia = imdb.IMDb()
 class saddness:
     vol = "50"
     temp = "/home/pi/Testy_Rasbian/teleBot"
+    #temp = "/home/hopu/Desktop/Testy_Rasbian/teleBot"
     playlist_int = '1-15'
 
 
@@ -48,6 +49,7 @@ def help(update, context):
 +'/sp + keywords - find a track on spotify \n'
 +'/sp_playlist + keywords - find a playlist on spotify \n \n'
 +'/play + URL - play audio from website/link \n'
++'/play_video + URL - play video from website/link \n'
 +'/pasue - pause audio playback \n'
 +'/cont - continue audio playback \n'
 +'/stop - stop audio playback \n \n'
@@ -72,13 +74,24 @@ def youtube_play(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.track/*.webm')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt").replace(" ","").encode('utf-8')
-    os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
+    URL = update.message.text.strip("/yt").encode('utf-8')
+    if ".com" in URL or ".be" in URL:
+       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
-    update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+       update.message.reply_text('Playing... ~(˘▾˘~) \n')
+    else:
+      os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
++' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
++'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
++' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
+      update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+ 
     song_name.close()
+
+#if "http" -> no display for get-title and get-id
+#if "keyword" -> go full function
     
 def youtube_play_last_track(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
@@ -94,11 +107,19 @@ def youtube_play_local(update, context):
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
     URL = update.message.text.strip("/yt_local ").encode('utf-8')
-    os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
+    if ".com" in URL or ".be" in URL:
+      os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
-    update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+      update.message.reply_text('Playing... ~(˘▾˘~) \n')
+    else:
+      os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
++' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s" -f bestaudio ytsearch:"' + URL
++'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
++' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
+      update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
+
     song_name.close()
     
 def youtube_local(update, context):
@@ -177,12 +198,19 @@ def spotify_track(update, context):
 ####Play other
 
 
-def play_other(update, context):
+def play_audio(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
-    update.message.reply_text('Playing... \n' + update.message.text.strip("/play "))
-    URL = update.message.text.strip("/play").replace(" ","").encode('utf-8')
+    update.message.reply_text('Playing... (~˘▾˘)~\n')
+    URL = update.message.text.strip("/play").encode('utf-8')
     os.system('$(mpv --no-video ' + URL + ' >/dev/null 2>&1 &)')
+
+def play_video(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    os.system('pkill mpv')
+    update.message.reply_text('Playing... (~˘▾˘)~\n')
+    URL = update.message.text.strip("/play_video").encode('utf-8')
+    os.system('mpv ' + URL)
 
 
 ####Playback options 
@@ -331,7 +359,8 @@ def main():
 
     # Playback
 
-    dp.add_handler(CommandHandler("play", play_other))
+    dp.add_handler(CommandHandler("play", play_audio))
+    dp.add_handler(CommandHandler("play_video", play_video))
     dp.add_handler(CommandHandler("stop", stop_playback))
     dp.add_handler(CommandHandler("pause", pause_playback))
     dp.add_handler(CommandHandler("cont", continue_playback))

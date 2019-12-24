@@ -48,6 +48,8 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ```/play + URL``` - play audio from website/link
 
+```/play_video + URL``` - play video from website/link
+
 ```/pasue``` - pause audio playback
 
 ```/cont``` - continue audio playback
