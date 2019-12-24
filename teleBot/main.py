@@ -37,7 +37,7 @@ def help(update, context):
 +'/yt + URL/keywords - play a song from youtube \n'
 +'/yt_last - play last song \n'
 +'/yt_playlist + URL - download and play a playlist from youtube \n'
-+'/yt_last_playlist + URL - fetch last played playlist from local storage \n'
++'/yt_last_playlist - fetch last played playlist from local storage \n'
 +'/yt_local + URL/keywords - play a song from youtube and add it to local playlist \n'
 +'/yt_playlist_int_cur - range of tracks, that are being downloaded from YT playlist (defauld 1-15 = first 15 tracks) \n'
 +'/yt_playlist_int_set + RANGE - change the range of tracks to RANGE (e.g. 1-5 = first 5 tracks), that are being downloaded from YT playlist (defauld 1-15 = first 15 tracks) \n \n'
@@ -74,7 +74,7 @@ def youtube_play(update, context):
     os.system('pkill mpv')
     URL = update.message.text.strip("/yt").replace(" ","").encode('utf-8')
     os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
-+' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s.%(ext)s" -f bestaudio ytsearch:"' + URL
++' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
     update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
@@ -95,7 +95,7 @@ def youtube_play_local(update, context):
     os.system('pkill mpv')
     URL = update.message.text.strip("/yt_local ").encode('utf-8')
     os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
-+' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s.%(ext)s" -f bestaudio ytsearch:"' + URL
++' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
     update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
@@ -114,7 +114,7 @@ def youtube_local(update, context):
 
 def youtube_local_purge(update, context):
     os.system('pkill mpv')
-    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/*.webm')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/*')
     update.message.reply_text('Removed all local playlist media \n ༼ つ ಥ_ಥ ༽つ ')
 
 def local_playlist_view(update, context):
@@ -137,18 +137,17 @@ def local_playlist_edit(update, context):
 
 
 def youtube_play_playlist(update, context):
-    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*.webm')
-    update.message.reply_text('Fetching playlist data...')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*')
     song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
     os.system('pkill mpv')
     URL = update.message.text.strip("/yt_playlist").replace(" ","").encode('utf-8')
-    os.system('$(youtube-dl --get-title '+ URL +' > ' + saddness.temp + '/temp/playlist.txt >/dev/null 2>&1 &)')
+    update.message.reply_text('Fetching playlist data...')
+    os.system('youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s" -f bestaudio ' + URL)
+    os.system('cd ' + saddness.temp + '/media/.playlist && ls > ' + saddness.temp + '/temp/playlist.txt')
+    update.message.reply_text('Playing... (~˘▾˘)~ \n')
     update.message.reply_text(song_name.read())
     song_name.close()
-    update.message.reply_text('Downloading... Please wait \n')
-    os.system('$(youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s.%(ext)s" -f bestaudio ' + URL + ' >/dev/null 2>&1 &)')
-    update.message.reply_text('Playing... (~˘▾˘)~ \n')
-    os.system('$(mpv --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
+    os.system('$(mpv --no-video --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
 
 def youtube_play_last(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')  

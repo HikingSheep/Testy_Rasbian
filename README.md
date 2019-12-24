@@ -20,7 +20,7 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ```/yt_playlist + URL``` - download and play a playlist from youtube
 
-```/yt_last_playlist + URL``` - fetch last played playlist from local storage
+```/yt_last_playlist``` - fetch last played playlist from local storage
 
 ```/yt_local + URL/keywords``` - play a song from youtube and add it to local playlist
 
