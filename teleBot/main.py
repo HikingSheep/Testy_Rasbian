@@ -135,7 +135,7 @@ def youtube_local(update, context):
 
 def youtube_local_purge(update, context):
     os.system('pkill mpv')
-    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/*')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/* && sudo rm ' + saddness.temp + '/media/.track/*')
     update.message.reply_text('Removed all local playlist media \n ༼ つ ಥ_ಥ ༽つ ')
 
 def local_playlist_view(update, context):
