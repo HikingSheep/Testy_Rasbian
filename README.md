@@ -82,15 +82,18 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ```/dw + /location(folder name)/file name``` - download specified file
 
->_File system includes folders that are not visible through ```/ls``` command, however, if the folder name is knonw, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^_
+```/file_delete + /location/file name``` - delete local file
+
+>_File system includes folders that are not visible through ```/ls``` command, however, if the folder name is known, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^_
 
 >_Drop images, video or documents in chat to upload them to the host machine. Can be viewed through ```/ls``` command after they are uploaded_
 
 ## Requirements:
 
-- python-telegram-bot
-- youtube-dl (latest)
-- spotipy
-- DuckDuckGo2
-- IMDbpy
+- [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
+- [youtube-dl (latest)](http://ytdl-org.github.io/youtube-dl/download.html)
+- [spotipy](https://github.com/plamere/spotipy)
+- [DuckDuckGo2](https://pypi.org/project/DuckDuckGo-Python3-Library/)
+- [IMDbpy](https://github.com/alberanid/imdbpy)
 - mpv
+- pulseaudio

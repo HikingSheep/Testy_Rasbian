@@ -5,25 +5,22 @@ import logging
 import os
 import string
 import duckduckgo
-import imdb
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from spotify import get_playlist, get_track
-
+from imdb import IMDb
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-ia = imdb.IMDb()
+ia = IMDb()
 
 class saddness:
     vol = "50"
     temp = "/home/pi/Testy_Rasbian/teleBot"
-    #temp = "/home/hopu/Desktop/Testy_Rasbian/teleBot"
     playlist_int = '1-15'
-
 
 os.system('pulseaudio --start && amixer -D pulse sset Master 50% && aplay ' + saddness.temp + '/media/.bot_media/start.wav')
 
@@ -61,33 +58,34 @@ def help(update, context):
 +'/cmd + command - allows to perform a terminal command on the local machine (!DANGEROUS!) \n \n'
 +'/ls - list available file system directories \n'
 +'/ls + available folder name - list files in the specified folder \n'
-+'/dw + /location/file name - download specified file \n \n'
++'/dw + /location/file name - download specified file \n'
++'/file_delete + /location/file name - delete local file \n \n'
 +'**/play function was tested only on youtube, vk, vimeo \n'
 +'Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player \n \n'
 +'***Drop images, video or documents in chat to upload them to the host machine \n \n'
-+'****File system includes folders that are not visible through ```/ls``` command, however, if the folder name is knonw, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^ \n')
++'****File system includes folders that are not visible through ```/ls``` command, however, if the folder name is known, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^ \n')
 
 
 ####Youtube
 
 def youtube_play(update, context):
-    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.track/*.webm')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.track/*')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt").encode('utf-8')
+    URL = update.message.text.strip("/yt")
     if ".com" in URL or ".be" in URL:
-       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
+      os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
-       update.message.reply_text('Playing... ~(˘▾˘~) \n')
+      update.message.reply_text('Playing... ~(˘▾˘~) \n')
     else:
       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
 +'" && youtube-dl --get-title ytsearch:"' + URL + '" > ' + saddness.temp + '/temp/name.txt' 
 +' && youtube-dl --get-id ytsearch:"' + URL + '" >> ' + saddness.temp + '/temp/name.txt')
       update.message.reply_text('Playing... ~(˘▾˘~) \n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
- 
+
     song_name.close()
 
 #if "http" -> no display for get-title and get-id
@@ -106,7 +104,7 @@ def youtube_play_local(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt_local ").encode('utf-8')
+    URL = update.message.text.strip("/yt_local ")
     if ".com" in URL or ".be" in URL:
       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s" -f bestaudio ytsearch:"' + URL
@@ -135,7 +133,7 @@ def youtube_local(update, context):
 
 def youtube_local_purge(update, context):
     os.system('pkill mpv')
-    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/* && sudo rm ' + saddness.temp + '/media/.track/*')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/* && sudo rm ' + saddness.temp + '/media/.track/* && sudo rm ' + saddness.temp + '/media/.playlist/* && sudo rm ' + saddness.temp + '/temp/*')
     update.message.reply_text('Removed all local playlist media \n ༼ つ ಥ_ಥ ༽つ ')
 
 def local_playlist_view(update, context):
@@ -147,7 +145,7 @@ def local_playlist_view(update, context):
     
 def local_playlist_edit(update, context):
     os.system('pkill mpv')
-    keyword = update.message.text.strip("/local_edit ").encode('utf-8')
+    keyword = update.message.text.strip("/local_edit ")
     os.system('sudo rm ' + saddness.temp + '/media/.local_playlist/"' + keyword + '" ')
     update.message.reply_text('File: \n' + keyword + '\n was removed (;´༎ຶД༎ຶ`)\n')
     os.system('cd '+ saddness.temp + '/media/.local_playlist && ls > ' + saddness.temp + '/temp/local_list.txt')
@@ -161,7 +159,7 @@ def youtube_play_playlist(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*')
     song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt_playlist").replace(" ","").encode('utf-8')
+    URL = update.message.text.strip("/yt_playlist").replace(" ","")
     update.message.reply_text('Fetching playlist data...')
     os.system('youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s" -f bestaudio ' + URL)
     os.system('cd ' + saddness.temp + '/media/.playlist && ls > ' + saddness.temp + '/temp/playlist.txt')
@@ -188,11 +186,11 @@ def youtube_playlist_int_set(update, context):
 ####Spotify
 
 def spotify_playlist(update, context):
-    keyword = update.message.text.strip("/sp_playlist ").encode('utf-8')
+    keyword = update.message.text.strip("/sp_playlist ")
     update.message.reply_text('Enjoy your playlist! \n' + get_playlist(str(keyword)))
 
 def spotify_track(update, context):
-    keyword = update.message.text.strip("/sp ").encode('utf-8')
+    keyword = update.message.text.strip("/sp ")
     update.message.reply_text('Enjoy your track! \n' + get_track(keyword))
 
 ####Play other
@@ -202,14 +200,14 @@ def play_audio(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
     update.message.reply_text('Playing... (~˘▾˘)~\n')
-    URL = update.message.text.strip("/play").encode('utf-8')
+    URL = update.message.text.strip("/play")
     os.system('$(mpv --no-video ' + URL + ' >/dev/null 2>&1 &)')
 
 def play_video(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
     update.message.reply_text('Playing... (~˘▾˘)~\n')
-    URL = update.message.text.strip("/play_video").encode('utf-8')
+    URL = update.message.text.strip("/play_video")
     os.system('mpv ' + URL)
 
 
@@ -244,14 +242,14 @@ def volume_cur(update, context):
 ####DuckDuckGo
 
 def search(update, context):
-    query = update.message.text.strip("/q ").encode('utf-8')
+    query = update.message.text.strip("/q ")
     update.message.reply_text(duckduckgo.get_zci(query))
     print (duckduckgo.get_zci(query))
 
 ####IMDb
 
 def search_movie(update, context):
-    keyword = update.message.text.strip("/imdb ").encode('utf-8')
+    keyword = update.message.text.strip("/imdb ")
     movies = ia.search_movie(keyword)
     url = ia.get_imdbURL(movies[0])
     update.message.reply_text(str(movies[0]['title']) + '\n https://www.imdb.com/title/tt' + str(movies[0].movieID))
@@ -286,7 +284,7 @@ def show_media(update, context):
     file_list.close()
 
 def download_media(update, context):
-    URL = update.message.text.strip("/dw").replace(" ","").encode('utf-8')
+    URL = update.message.text.strip("/dw").replace(" ","")
     update.message.bot.send_document(chat_id = update.message.chat_id, filename=URL, document=open(saddness.temp + '/media' + URL, 'rb'))
     update.message.reply_text('Downloading from storage... ' + URL)
 
@@ -294,29 +292,38 @@ def voice(update, context):
     FileID = update.message.voice.file_id[20:]
     print (FileID)
     newFile = update.message.voice.get_file()
-    newFile.download(saddness.temp + "/media/audio/" + FileID + '.mp3')
+    newFile.download(saddness.temp + '/media/audio/' + FileID + '.mp3')
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def photo(update, context):
     FileID = update.message.photo[-1].file_id[40:]
     print (FileID)
     newFile = update.message.photo[-1].get_file()
-    newFile.download(saddness.temp + "/media/image/" + FileID + '.jpg')
+    newFile.download(saddness.temp + '/media/image/' + FileID + '.jpg')
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def video(update, context):
     FileID = update.message.video.file_id[20:]
     print (FileID)
     newFile = update.message.video.get_file()
-    newFile.download(saddness.temp + "/media/video/" + FileID + '.mp4')
+    newFile.download(saddness.temp + '/media/video/' + FileID + '.mp4')
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def document(update, context):
     FileID = update.message.document.file_id[20:]
     print (FileID)
     newFile = update.message.document.get_file()
-    newFile.download(saddness.temp + "/media/document/" + FileID)
+    newFile.download(saddness.temp + '/media/document/' + FileID)
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
+
+def local_folder_edit(update, context):
+    os.system('pkill mpv')
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    URL = update.message.text.strip("/file_delete").replace(" ","")
+    print(saddness.temp + '/media/' + URL)
+    os.system('sudo rm ' + saddness.temp + '/media/' + URL)
+    update.message.reply_text('File removed \n ༼ つ ಥ_ಥ ༽つ ')
+    
 
 ####
 
@@ -376,6 +383,8 @@ def main():
 
     dp.add_handler(CommandHandler("ls", show_media))
     dp.add_handler(CommandHandler("dw", download_media))
+    dp.add_handler(CommandHandler("file_delete", local_folder_edit))
+
 
     # Random
 

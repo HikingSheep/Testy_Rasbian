@@ -6,7 +6,7 @@
 # See LICENSE for terms of usage, modification and redistribution.
 
 import urllib
-import urllib2
+from urllib.request import urlopen
 import json as j
 import sys
 
