@@ -82,6 +82,8 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 ```/dw + /location(folder name)/file name``` - download specified file
 
+```/file_rename + /location/file name(space)new name``` - rename specified file
+
 ```/file_delete + /location/file name``` - delete local file
 
 >_File system includes folders that are not visible through ```/ls``` command, however, if the folder name is known, it can be opened (currently available hidden folders: .bot_media, .playlist, .local_playlist, .track). Therefore, these files can be downloaded manually ^_^_

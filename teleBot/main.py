@@ -59,6 +59,7 @@ def help(update, context):
 +'/ls - list available file system directories \n'
 +'/ls + available folder name - list files in the specified folder \n'
 +'/dw + /location/file name - download specified file \n'
++'/file_rename + /location/file name(space)new name - rename specified file \n'
 +'/file_delete + /location/file name - delete local file \n \n'
 +'**/play function was tested only on youtube, vk, vimeo \n'
 +'Since Spotfiy has a lot of restrictions, it allows playback only through certified applications and Web Player \n \n'
@@ -296,7 +297,7 @@ def voice(update, context):
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def photo(update, context):
-    FileID = update.message.photo[-1].file_id[40:]
+    FileID = update.message.photo[-1].file_id[:20]
     print (FileID)
     newFile = update.message.photo[-1].get_file()
     newFile.download(saddness.temp + '/media/image/' + FileID + '.jpg')
@@ -316,8 +317,17 @@ def document(update, context):
     newFile.download(saddness.temp + '/media/document/' + FileID)
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
+def local_file_rename(update, context):
+    os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
+    URL = update.message.text.strip("/file_rename")[1:].split('/')
+    URL2 = URL[1].split()
+    URL = URL + URL2
+    del URL[1]
+    print('mv ' + saddness.temp + '/media/' + URL[0] + "/" + URL[1] + ' ' + saddness.temp + '/media/' + URL[0] + "/" + URL[2])
+    os.system('sudo mv ' + saddness.temp + '/media/' + URL[0] + "/" + URL[1] + ' ' + saddness.temp + '/media/' + URL[0] + "/" + URL[2])
+    update.message.reply_text('File renamed 🌚')
+
 def local_folder_edit(update, context):
-    os.system('pkill mpv')
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     URL = update.message.text.strip("/file_delete").replace(" ","")
     print(saddness.temp + '/media/' + URL)
@@ -384,6 +394,7 @@ def main():
     dp.add_handler(CommandHandler("ls", show_media))
     dp.add_handler(CommandHandler("dw", download_media))
     dp.add_handler(CommandHandler("file_delete", local_folder_edit))
+    dp.add_handler(CommandHandler("file_rename", local_file_rename))
 
 
     # Random
