@@ -451,6 +451,7 @@ def main():
 
     dp.add_handler(CommandHandler("getID", getID))
     dp.add_handler(CommandHandler("auth", auth))
+    dp.add_handler(CommandHandler("req", request_access))
     
 
     # on noncommand i.e message - echo the message on Telegram
