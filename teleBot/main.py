@@ -14,6 +14,8 @@ myclient = pymongo.MongoClient("mongodb+srv://berlyozzy:****@cluster0-wnddk.mong
 
 mydb = myclient["mydatabase"]
 mycol = mydb["users"]
+mycol2 = mydb["codes"]
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -347,6 +349,33 @@ def auth(update, context):
     for x in mycol.find():
         if x.get("id") == str.user_id:
             print(update.message.reply_text("You are in DB"))
+        else:
+            return update.message.reply_text("Not yet regitered")
+
+def request_access(update, context):
+    user_id = update.message.from_user.id
+    code = update.message.text.strip("/req").replace(" ","")
+    pass_auth = 'false'
+    level = ''
+
+    for x in mycol2.find():
+        if x.get("code") == code:
+            pass_auth = 'true'
+            level = mycol2.find_one(code).get("access_level")
+        else:
+            return update.message.reply_text("Denied")
+
+    for x in mycol.find():
+        if x.get("id") == str.user_id:
+            print(update.message.reply_text("You are in DB"))
+
+        elif pass_auth == 'true':
+            new_user = { "id": str.user_id, "access_level":level}
+            print(update.message.reply_text("You are in DB"))
+        
+        else:
+            return update.message.reply_text("Denied")
+
 
 ####
 
