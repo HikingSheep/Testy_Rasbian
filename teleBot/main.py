@@ -77,10 +77,20 @@ def help(update, context):
 ####Youtube
 
 def youtube_play(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.track/*')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt")
+    URL = update.message.text.strip("/yt")[1:]
     if ".com" in URL or ".be" in URL:
       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.track/%(title)s" -f bestaudio ytsearch:"' + URL
@@ -100,6 +110,17 @@ def youtube_play(update, context):
 #if "keyword" -> go full function
     
 def youtube_play_last_track(update, context):
+
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
@@ -107,10 +128,21 @@ def youtube_play_last_track(update, context):
     song_name.close()
     
 def youtube_play_local(update, context):
+
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt_local ")
+    URL = update.message.text.strip("/yt_local")[1:]
     if ".com" in URL or ".be" in URL:
       os.system('$(youtube-dl -f bestaudio -o - ytsearch:"' + URL + '" | mpv --no-video - >/dev/null 2>&1 &)'
 +' && youtube-dl -o "' + saddness.temp + '/media/.local_playlist/%(title)s" -f bestaudio ytsearch:"' + URL
@@ -127,6 +159,16 @@ def youtube_play_local(update, context):
     song_name.close()
     
 def youtube_local(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')
     song_name = open(saddness.temp + '/temp/name.txt', 'r') 
     update.message.reply_text('Starting local playlist... ~(˘▾˘~)\n')
@@ -138,11 +180,31 @@ def youtube_local(update, context):
     song_name.close()
 
 def youtube_local_purge(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('pkill mpv')
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && sudo rm ' + saddness.temp + '/media/.local_playlist/* && sudo rm ' + saddness.temp + '/media/.track/* && sudo rm ' + saddness.temp + '/media/.playlist/* && sudo rm ' + saddness.temp + '/temp/*')
     update.message.reply_text('Removed all local playlist media \n ༼ つ ಥ_ಥ ༽つ ')
 
 def local_playlist_view(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('cd '+ saddness.temp + '/media/.local_playlist && ls > ' + saddness.temp + '/temp/local_list.txt')
     file_list = open(saddness.temp + '/temp/local_list.txt', 'r')
@@ -150,8 +212,18 @@ def local_playlist_view(update, context):
     file_list.close()
     
 def local_playlist_edit(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('pkill mpv')
-    keyword = update.message.text.strip("/local_edit ")
+    keyword = update.message.text.strip("/local_edit")[1:]
     os.system('sudo rm ' + saddness.temp + '/media/.local_playlist/"' + keyword + '" ')
     update.message.reply_text('File: \n' + keyword + '\n was removed (;´༎ຶД༎ຶ`)\n')
     os.system('cd '+ saddness.temp + '/media/.local_playlist && ls > ' + saddness.temp + '/temp/local_list.txt')
@@ -162,10 +234,20 @@ def local_playlist_edit(update, context):
 
 
 def youtube_play_playlist(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && rm ' + saddness.temp + '/media/.playlist/*')
     song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
     os.system('pkill mpv')
-    URL = update.message.text.strip("/yt_playlist").replace(" ","")
+    URL = update.message.text.strip("/yt_playlist")[1:]
     update.message.reply_text('Fetching playlist data...')
     os.system('youtube-dl --skip-unavailable-fragments --yes-playlist --playlist-items ' + saddness.playlist_int + ' -o "' + saddness.temp + '/media/.playlist/%(title)s" -f bestaudio ' + URL)
     os.system('cd ' + saddness.temp + '/media/.playlist && ls > ' + saddness.temp + '/temp/playlist.txt')
@@ -175,6 +257,16 @@ def youtube_play_playlist(update, context):
     os.system('$(mpv --no-video --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
 
 def youtube_play_last(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav && pkill mpv')  
     song_name = open(saddness.temp + '/temp/playlist.txt', 'r') 
     update.message.reply_text('Fetching playlist data... \n \n' + song_name.read())
@@ -183,26 +275,72 @@ def youtube_play_last(update, context):
     os.system('$(mpv --playlist ' + saddness.temp + '/media/.playlist/ >/dev/null 2>&1 &)')
     
 def youtube_playlist_int_cur(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     update.message.reply_text(saddness.playlist_int)
 
 def youtube_playlist_int_set(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     update.message.reply_text('Changing to... \n' + update.message.text.strip("/yt_playlist_int_set ").replace(" ",""))
     saddness.playlist_int = update.message.text.strip("/yt_playlist_int_set ").replace(" ","")
 
 ####Spotify
 
 def spotify_playlist(update, context):
-    keyword = update.message.text.strip("/sp_playlist ")
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, spotify playlist")
+        else:
+            return update.message.reply_text("Denied")
+
+    keyword = update.message.text.strip("/sp_playlist")[1:]
     update.message.reply_text('Enjoy your playlist! \n' + get_playlist(str(keyword)))
 
 def spotify_track(update, context):
-    keyword = update.message.text.strip("/sp ")
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, spotify track")
+        else:
+            return update.message.reply_text("Denied")
+
+    keyword = update.message.text.strip("/sp")[1:]
     update.message.reply_text('Enjoy your track! \n' + get_track(keyword))
 
 ####Play other
 
 
 def play_audio(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
     update.message.reply_text('Playing... (~˘▾˘)~\n')
@@ -210,6 +348,16 @@ def play_audio(update, context):
     os.system('$(mpv --no-video ' + URL + ' >/dev/null 2>&1 &)')
 
 def play_video(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     os.system('pkill mpv')
     update.message.reply_text('Playing... (~˘▾˘)~\n')
@@ -220,6 +368,16 @@ def play_video(update, context):
 ####Playback options 
 
 def pause_playback(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Pause...')
     os.system('pkill mpv -STOP')
@@ -230,6 +388,16 @@ def continue_playback(update, context):
     os.system('pkill mpv -CONT')
 
 def stop_playback(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Stopping...')
     os.system('pkill mpv')
@@ -237,25 +405,61 @@ def stop_playback(update, context):
 ####Volume
 
 def volume(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
-    update.message.reply_text('Changing to... \n' + update.message.text.strip("/volume ").replace(" ","") + '%')
+    update.message.reply_text('Changing to... \n' + update.message.text.strip("/volume")[1:] + '%')
     saddness.vol = update.message.text.strip("/volume ").replace(" ","").replace("%","")
     os.system('amixer -D pulse sset Master ' + saddness.vol + '%')
 
 def volume_cur(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     update.message.reply_text(saddness.vol + '%')
 
 ####DuckDuckGo
 
 def search(update, context):
-    query = update.message.text.strip("/q ")
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, showing media")
+        else:
+            return update.message.reply_text("Denied")   
+
+    query = update.message.text.strip("/q")[1:]
     update.message.reply_text(duckduckgo.get_zci(query))
     print (duckduckgo.get_zci(query))
 
 ####IMDb
 
 def search_movie(update, context):
-    keyword = update.message.text.strip("/imdb ")
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, showing media")
+        else:
+            return update.message.reply_text("Denied")
+
+    keyword = update.message.text.strip("/imdb")[1:]
     movies = ia.search_movie(keyword)
     url = ia.get_imdbURL(movies[0])
     update.message.reply_text(str(movies[0]['title']) + '\n https://www.imdb.com/title/tt' + str(movies[0].movieID))
@@ -275,12 +479,31 @@ def git(update, context):
     update.message.reply_text("https://github.com/HikingSheep/Testy_Rasbian")
     
 def OS(update, context):
-    command = update.message.text.strip("/cmd").encode('utf-8')
+    user_id = update.message.from_user.id
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+    command = update.message.text.strip("/cmd")[1:]
     os.system(command)
 
 ####File System
 
 def show_media(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, showing media")
+        else:
+            return update.message.reply_text("Denied")
+
     keyword = update.message.text.strip("/ls ")
     os.system('cd '+ saddness.temp + '/media/' + keyword + ' && ls > ' + saddness.temp + '/temp/list.txt')
     file_list = open(saddness.temp + '/temp/list.txt', 'r')
@@ -288,11 +511,29 @@ def show_media(update, context):
     file_list.close()
 
 def download_media(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, allow download")
+        else:
+            return update.message.reply_text("Denied")
+
     URL = update.message.text.strip("/dw").replace(" ","")
     update.message.bot.send_document(chat_id = update.message.chat_id, filename=URL, document=open(saddness.temp + '/media' + URL, 'rb'))
     update.message.reply_text('Downloading from storage... ' + URL)
 
 def voice(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     FileID = update.message.voice.file_id[20:]
     print (FileID)
     newFile = update.message.voice.get_file()
@@ -300,6 +541,17 @@ def voice(update, context):
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def photo(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+
     FileID = update.message.photo[-1].file_id[:20]
     print (FileID)
     newFile = update.message.photo[-1].get_file()
@@ -307,6 +559,17 @@ def photo(update, context):
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def video(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+
     FileID = update.message.video.file_id[20:]
     print (FileID)
     newFile = update.message.video.get_file()
@@ -314,6 +577,17 @@ def video(update, context):
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def document(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+
     FileID = update.message.document.file_id[20:]
     print (FileID)
     newFile = update.message.document.get_file()
@@ -321,6 +595,17 @@ def document(update, context):
     update.message.reply_text('Hmmm... Uploaded ┬┴┬┴┤(･_├┬┴┬┴')
 
 def local_file_rename(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     URL = update.message.text.strip("/file_rename")[1:].split('/')
     URL2 = URL[1].split()
@@ -331,13 +616,36 @@ def local_file_rename(update, context):
     update.message.reply_text('File renamed 🌚')
 
 def local_folder_edit(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0" | "1":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
-    URL = update.message.text.strip("/file_delete").replace(" ","")
+    URL = update.message.text.strip("/file_delete")[1:]
     print(saddness.temp + '/media/' + URL)
     os.system('sudo rm ' + saddness.temp + '/media/' + URL)
     update.message.reply_text('File removed \n ༼ つ ಥ_ಥ ༽つ ')
 
 ####Authorization
+
+def admin_help(update, context):
+    update.message.reply_text('Help! \n \n'
++'/getID - get your telegram ID \n'
++'/auth - check if registered \n'
++'/req + code - request access \n'
++'/req_code - get the code for your access level to share with unregistered user \n'
++'/del_user + id - delete user from DB \n'
++'/update_user + id/access level + old value + new value - update users id or access level \n'
++'/update_code + old value + new value - change the specified code \n \n'
++'/view_users - list all users \n'
++'/view_codes - list all codes')
 
 def getID(update, context):
     user_id = update.message.from_user.id
@@ -347,35 +655,150 @@ def auth(update, context):
     user_id = update.message.from_user.id
 
     for x in mycol.find():
-        if x.get("id") == str.user_id:
+        if x.get("id") == str(user_id):
             print(update.message.reply_text("You are in DB"))
         else:
             return update.message.reply_text("Not yet regitered")
 
 def request_access(update, context):
     user_id = update.message.from_user.id
-    code = update.message.text.strip("/req").replace(" ","")
+    code = update.message.text.strip("/req")[1:]
     pass_auth = 'false'
     level = ''
 
     for x in mycol2.find():
         if x.get("code") == code:
             pass_auth = 'true'
-            level = mycol2.find_one(code).get("access_level")
+            x = mycol2.find_one(code)
+            level = x.get("access_level")
         else:
             return update.message.reply_text("Denied")
 
     for x in mycol.find():
-        if x.get("id") == str.user_id:
+        if x.get("id") == str(user_id):
             print(update.message.reply_text("You are in DB"))
 
         elif pass_auth == 'true':
-            new_user = { "id": str.user_id, "access_level":level}
+            new_user = { "id": str(user_id), "access_level":level}
             print(update.message.reply_text("You are in DB"))
         
         else:
             return update.message.reply_text("Denied")
 
+def request_code(update, context):
+    user_id = update.message.from_user.id
+    code = update.message.text.strip("/req_code")[1:]
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+        else:
+            return update.message.reply_text("Denied")
+
+    code_level = mycol2.find_one({"access_level":level})
+    update.message.reply_text(code_level.get("code"))
+
+def delete_user(update, context):
+    user_id = update.message.from_user.id
+    other_id = update.message.text.strip("/del_user")[1:]
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+    
+    user = { "id": other_id }
+    mycol2.delete_one(user)
+    update.message.reply_text("deleted "+other_id)
+
+def view_all(update, context):
+    user_id = update.message.from_user.id
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+    
+    for x in mycol.find():
+        update.message.reply_text(x.get("id") + " : access_level " + x.get("access_level"))
+
+def update_user(update, context):
+    user_id = update.message.from_user.id
+    other_id = update.message.text.strip("/update_user").split()
+    level = ''
+    access_list = ['0','1','2']
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+    
+    user = { other_id[0] : other_id[1] }
+    user_upd = { "$set": { other_id[0] : other_id[2] } }
+
+    if other_id[0] == "id":
+        if other_id[2] in access_list:
+            mycol.update_one(user, user_upd)
+            update.message.reply_text("Updated user ID")
+        else:
+            return update.message.reply_text("Wrong data")
+    elif other_id[0] == "access_level":
+        if other_id[2] in access_list:
+            mycol.update_one(user, user_upd)
+            update.message.reply_text("Updated user's access")
+        else:
+            return update.message.reply_text("Wrong data")
+    else:
+        return update.message.reply_text("Wrong data")
+
+def update_code(update, contenxt):
+    user_id = update.message.from_user.id
+    other_id = update.message.text.strip("/update_code").split()
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+    
+    code = { other_id[0] : other_id[1] }
+    code_upd = { "$set": { other_id[0] : other_id[2] } }
+
+    if other_id[0] == "code":
+        mycol2.update_one(code, code_upd)
+        update.message.reply_text("Code updated")
+    else:
+        return update.message.reply_text("Wrong data")
+
+def view_all_codes(update, context):
+    user_id = update.message.from_user.id
+    level = ''
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level != "0":
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+    
+    for x in mycol2.find():
+        update.message.reply_text(x.get("code") + " : access_level " + x.get("access_level"))
 
 ####
 
@@ -449,9 +872,16 @@ def main():
 
     # Authentication
 
+    dp.add_handler(CommandHandler("admin_help", admin_help))
     dp.add_handler(CommandHandler("getID", getID))
     dp.add_handler(CommandHandler("auth", auth))
     dp.add_handler(CommandHandler("req", request_access))
+    dp.add_handler(CommandHandler("req_code", request_code))
+    dp.add_handler(CommandHandler("del_user", delete_user))
+    dp.add_handler(CommandHandler("update_user", update_user))
+    dp.add_handler(CommandHandler("update_code", update_code))
+    dp.add_handler(CommandHandler("view_users", view_all))
+    dp.add_handler(CommandHandler("view_codes", view_all_codes))
     
 
     # on noncommand i.e message - echo the message on Telegram
