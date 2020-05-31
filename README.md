@@ -1,6 +1,7 @@
 # Testy
 
-A telegram bot, running on Raspberry Pi (Rasbian Burst).
+A telegram bot, running on Raspberry Pi (Raspbian Pi OS).
+[http://www.theatticproject.co.uk](http://www.theatticproject.co.uk)
 
 
 
@@ -90,6 +91,34 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 
 >_Drop images, video or documents in chat to upload them to the host machine. Can be viewed through ```/ls``` command after they are uploaded_
 
+### Authentication
+
+```/admin_help``` - list of admin/authentication commands
+
+```/getID``` - get your telegram ID
+
+```/auth``` - check if registered
+
+```/req + code``` - request access
+
+```/req_code``` - get a code for your access level to share with unregistered user 
+
+```/del_user + id``` - delete user from DB (admin only)
+
+```/update_user + id/access level + old value + new value``` - update users id or access level (admin only)
+
+```/update_code + old value + new value``` - change a specified code (admin only)
+
+```/view_users``` - list all users (admin only)
+
+```/view_codes``` - list all codes (admin only)
+
+>_Every registered user has an id and an access level {id : access level}. Access level is used to determain if the user has enough privelegies to use specific functions._
+
+>_If the user is not registered, they are unable to interact with a bot, with an exception of a few simple commands (help, echo, git). Unregistered users can also request access (register), if they received a code of any access level from registered user._
+
+>_There is a total of 3 different codes/access levels: 0 - admin, 1 - normal user, 2 - is for external users, who don't need access to host machine (e.g. they can use spotify api, but not youtube (play music on the device) {tbr later}). Admin can change access levels for users. Every user can request a code for new users, but they will receive a code only for their own access level._
+
 ## Requirements:
 
 - [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
@@ -97,5 +126,8 @@ A telegram bot, running on Raspberry Pi (Rasbian Burst).
 - [spotipy](https://github.com/plamere/spotipy)
 - [DuckDuckGo2](https://pypi.org/project/DuckDuckGo-Python3-Library/)
 - [IMDbpy](https://github.com/alberanid/imdbpy)
+- [Strava](https://developers.strava.com/docs/reference/) - to be added
+- [Weather](https://openweathermap.org/api) - to be added
+- pymongo + dnspython
 - mpv
 - pulseaudio

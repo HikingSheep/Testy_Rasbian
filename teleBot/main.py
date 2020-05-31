@@ -78,11 +78,12 @@ def help(update, context):
 
 def youtube_play(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -110,13 +111,13 @@ def youtube_play(update, context):
 #if "keyword" -> go full function
     
 def youtube_play_last_track(update, context):
-
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -128,13 +129,12 @@ def youtube_play_last_track(update, context):
     song_name.close()
     
 def youtube_play_local(update, context):
-
     user_id = update.message.from_user.id
-
+    access_list = ("0","1")
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -160,11 +160,12 @@ def youtube_play_local(update, context):
     
 def youtube_local(update, context):
     user_id = update.message.from_user.id
-
+    access_list = ("0","1")
+    
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -181,11 +182,12 @@ def youtube_local(update, context):
 
 def youtube_local_purge(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -196,11 +198,12 @@ def youtube_local_purge(update, context):
 
 def local_playlist_view(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -213,11 +216,12 @@ def local_playlist_view(update, context):
     
 def local_playlist_edit(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -235,11 +239,12 @@ def local_playlist_edit(update, context):
 
 def youtube_play_playlist(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -258,11 +263,12 @@ def youtube_play_playlist(update, context):
 
 def youtube_play_last(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -276,11 +282,12 @@ def youtube_play_last(update, context):
     
 def youtube_playlist_int_cur(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -289,11 +296,12 @@ def youtube_playlist_int_cur(update, context):
 
 def youtube_playlist_int_set(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -332,11 +340,12 @@ def spotify_track(update, context):
 
 def play_audio(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -349,11 +358,12 @@ def play_audio(update, context):
 
 def play_video(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -369,11 +379,12 @@ def play_video(update, context):
 
 def pause_playback(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -383,17 +394,29 @@ def pause_playback(update, context):
     os.system('pkill mpv -STOP')
 
 def continue_playback(update, context):
+    user_id = update.message.from_user.id
+    access_list = ("0","1")
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            level = x.get("access_level")
+            if level not in access_list:
+                return update.message.reply_text("Denied")
+        else:
+            return update.message.reply_text("Denied")
+
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
     update.message.reply_text('Continuing...')
     os.system('pkill mpv -CONT')
 
 def stop_playback(update, context):
     user_id = update.message.from_user.id
-
+    access_list = ("0","1")
+    
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -406,11 +429,12 @@ def stop_playback(update, context):
 
 def volume(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -422,11 +446,12 @@ def volume(update, context):
 
 def volume_cur(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -525,11 +550,12 @@ def download_media(update, context):
 
 def voice(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -542,11 +568,12 @@ def voice(update, context):
 
 def photo(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -560,11 +587,12 @@ def photo(update, context):
 
 def video(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -578,11 +606,12 @@ def video(update, context):
 
 def document(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -596,11 +625,12 @@ def document(update, context):
 
 def local_file_rename(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -617,11 +647,12 @@ def local_file_rename(update, context):
 
 def local_folder_edit(update, context):
     user_id = update.message.from_user.id
+    access_list = ("0","1")
 
     for x in mycol.find():
         if x.get("id") == str(user_id):
             level = x.get("access_level")
-            if level != "0" | "1":
+            if level not in access_list:
                 return update.message.reply_text("Denied")
         else:
             return update.message.reply_text("Denied")
@@ -636,14 +667,22 @@ def local_folder_edit(update, context):
 ####Authorization
 
 def admin_help(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, showing media")
+        else:
+            return update.message.reply_text("Denied")
+            
     update.message.reply_text('Help! \n \n'
 +'/getID - get your telegram ID \n'
 +'/auth - check if registered \n'
 +'/req + code - request access \n'
-+'/req_code - get the code for your access level to share with unregistered user \n'
++'/req_code - get a code for your access level to share with unregistered user \n'
 +'/del_user + id - delete user from DB \n'
 +'/update_user + id/access level + old value + new value - update users id or access level \n'
-+'/update_code + old value + new value - change the specified code \n \n'
++'/update_code + old value + new value - change a specified code \n \n'
 +'/view_users - list all users \n'
 +'/view_codes - list all codes')
 
