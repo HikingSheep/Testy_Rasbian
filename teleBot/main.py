@@ -5,10 +5,15 @@ import logging
 import os
 import string
 import duckduckgo
+import pymongo
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from spotify import get_playlist, get_track
 from imdb import IMDb
+myclient = pymongo.MongoClient("mongodb+srv://berlyozzy:****@cluster0-wnddk.mongodb.net/test?retryWrites=true&w=majority")
+
+mydb = myclient["mydatabase"]
+mycol = mydb["users"]
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -98,8 +103,6 @@ def youtube_play_last_track(update, context):
     update.message.reply_text('Playing... ~(˘▾˘~)\n' + song_name.readline() + '\n' + 'https://youtu.be/' + song_name.readline())
     os.system('$(mpv --playlist ' + saddness.temp + '/media/.track/ >/dev/null 2>&1 &)')
     song_name.close()
-    
-    
     
 def youtube_play_local(update, context):
     os.system('aplay '+ saddness.temp + '/media/.bot_media/function.wav')
@@ -256,12 +259,10 @@ def search_movie(update, context):
     update.message.reply_text(str(movies[0]['title']) + '\n https://www.imdb.com/title/tt' + str(movies[0].movieID))
 
 ####Random
- 
 
 def echo(update, context):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
-
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -333,7 +334,19 @@ def local_folder_edit(update, context):
     print(saddness.temp + '/media/' + URL)
     os.system('sudo rm ' + saddness.temp + '/media/' + URL)
     update.message.reply_text('File removed \n ༼ つ ಥ_ಥ ༽つ ')
-    
+
+####Authorization
+
+def getID(update, context):
+    user_id = update.message.from_user.id
+    print(update.message.reply_text(user_id))
+
+def auth(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str.user_id:
+            print(update.message.reply_text("You are in DB"))
 
 ####
 
@@ -404,6 +417,11 @@ def main():
     dp.add_handler(CommandHandler("git", git))
     dp.add_handler(CommandHandler("cmd", OS))
     
+
+    # Authentication
+
+    dp.add_handler(CommandHandler("getID", getID))
+    dp.add_handler(CommandHandler("auth", auth))
     
 
     # on noncommand i.e message - echo the message on Telegram
