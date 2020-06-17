@@ -10,6 +10,7 @@ import pymongo
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from spotify import get_playlist, get_track
 from imdb import IMDb
+from weatherapi import GetWeather
 myclient = pymongo.MongoClient("mongodb+srv://berlyozzy:****@cluster0-wnddk.mongodb.net/test?retryWrites=true&w=majority")
 
 mydb = myclient["mydatabase"]
@@ -488,6 +489,34 @@ def search_movie(update, context):
     movies = ia.search_movie(keyword)
     url = ia.get_imdbURL(movies[0])
     update.message.reply_text(str(movies[0]['title']) + '\n https://www.imdb.com/title/tt' + str(movies[0].movieID))
+
+####Weather
+
+def Weather(update, context):
+    user_id = update.message.from_user.id
+
+    for x in mycol.find():
+        if x.get("id") == str(user_id):
+            print("has_access, showing weather")
+        else:
+            return update.message.reply_text("Denied")
+
+    keyword = update.message.text.strip("/w")[1:]
+    weatherData = weatherapi.GetWeather(keyword)
+
+    if weatherData == "City Not Found":
+        update.message.reply_text("City Not Found")
+    else:
+        update.message.reply_text(
+            " Temperature (Celsius) = " +
+                        str(weatherData[1]) + 
+            "\n humidity (in percentage) = " +
+                        str(weatherData[0]) +
+            "\n wind speed (m/s) = " +
+                        str(weatherData[2]) +
+            "\n description = " +
+                        str(weatherData[3]))
+    
 
 ####Random
 

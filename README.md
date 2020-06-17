@@ -11,7 +11,9 @@ A telegram bot, running on Raspberry Pi (Raspbian Pi OS).
 
 ```/hi``` - say "Hi!" to the bot
 
-```/cmd + command``` - allows to perform a terminal command on the local machine (!DANGEROUS!)
+```/git``` - request a git repository link
+
+```/cmd + command``` - allows to perform a terminal command on the host machine (!DANGEROUS!) ```(admin only)```
 
 ### Youtube
 
@@ -103,15 +105,15 @@ A telegram bot, running on Raspberry Pi (Raspbian Pi OS).
 
 ```/req_code``` - get a code for your access level to share with unregistered user 
 
-```/del_user + id``` - delete user from DB (admin only)
+```/del_user + id``` - delete user from DB ```(admin only)```
 
-```/update_user + id/access level + old value + new value``` - update users id or access level (admin only)
+```/update_user + id/access level + old value + new value``` - update users id or access level ```(admin only)```
 
-```/update_code + old value + new value``` - change a specified code (admin only)
+```/update_code + old value + new value``` - change a specified code ```(admin only)```
 
-```/view_users``` - list all users (admin only)
+```/view_users``` - list all users ```(admin only)```
 
-```/view_codes``` - list all codes (admin only)
+```/view_codes``` - list all codes ```(admin only)```
 
 >_Every registered user has an id and an access level {id : access level}. Access level is used to determain if the user has enough privelegies to use specific functions._
 
