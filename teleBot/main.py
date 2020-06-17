@@ -492,7 +492,7 @@ def search_movie(update, context):
 
 ####Weather
 
-def Weather(update, context):
+def weather(update, context):
     user_id = update.message.from_user.id
 
     for x in mycol.find():
@@ -502,20 +502,16 @@ def Weather(update, context):
             return update.message.reply_text("Denied")
 
     keyword = update.message.text.strip("/w")[1:]
-    weatherData = weatherapi.GetWeather(keyword)
+    weatherData = GetWeather(keyword)
 
     if weatherData == "City Not Found":
         update.message.reply_text("City Not Found")
     else:
         update.message.reply_text(
-            " Temperature (Celsius) = " +
-                        str(weatherData[1]) + 
-            "\n humidity (in percentage) = " +
-                        str(weatherData[0]) +
-            "\n wind speed (m/s) = " +
-                        str(weatherData[2]) +
-            "\n description = " +
-                        str(weatherData[3]))
+            " \U0001F321 \n" + str(weatherData[1]) + " C" + 
+            "\n \U0001F32B \n" + str(weatherData[0]) + " %" +
+            "\n \U0001F32C \n" + str(weatherData[3]) + " m/s" +
+            "\n\n" + str(weatherData[2]))
     
 
 ####Random
@@ -934,6 +930,7 @@ def main():
 
     dp.add_handler(CommandHandler("q", search))
     dp.add_handler(CommandHandler("imdb", search_movie))
+    dp.add_handler(CommandHandler("w", weather))
     dp.add_handler(CommandHandler("git", git))
     dp.add_handler(CommandHandler("cmd", OS))
     
