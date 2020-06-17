@@ -57,7 +57,7 @@ def GetWeather(city):
     
     else: 
         return "City Not Found"
-
+        
 # GetWeather("Newcastle")
 
 # Example Data
