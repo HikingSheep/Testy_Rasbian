@@ -68,8 +68,8 @@ def GetWeather(city):
         # + "<b>Feels like</b>: " + str(stats[3]) + " C" + "\n"
         # + "<b>Humidity</b>: " + str(stats[4]) + " %" + "\n"
         # + "<b>Wind</b>: " + str(stats[5]) + " m/s" + "\n"
-        # + "<b>Sunrise</b>: " + str(stats[6])[11:] + "\n"
-        # + "<b>Sunset</b>: " + str(stats[7])[11:] + "\n\n"
+        # + "<b>Sunrise</b>: " + str(stats[6])[11:][:5] + "\n"
+        # + "<b>Sunset</b>: " + str(stats[7])[11:][:5] + "\n\n"
         # + str(stats[8]).capitalize()) 
     
     else: 

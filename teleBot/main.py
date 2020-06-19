@@ -62,6 +62,7 @@ def help(update, context):
 +'/volume + INT (e.g. 50 = 50%) - change volume to INT \n \n'
 +'/q + query - search for something online \n'
 +'/imdb + movie - search for movie on IMDb \n'
++'/2 + city name - show current weather and additional relevant information \n'
 +'/git - request git repository link \n'
 +'/cmd + command - allows to perform a terminal command on the local machine (!DANGEROUS!) \n \n'
 +'/ls - list available file system directories \n'
@@ -513,9 +514,9 @@ def weather(update, context):
         + "<b>Feels like</b>: " + str(weatherData[3]) + " C" + "\n"
         + "<b>Humidity</b>: " + str(weatherData[4]) + " %" + "\n"
         + "<b>Wind</b>: " + str(weatherData[5]) + " m/s" + "\n"
-        + "<b>Sunrise</b>: " + str(weatherData[6])[11:] + "\n"
-        + "<b>Sunset</b>: " + str(weatherData[7])[11:] + "\n\n"
-        + str(weatherData[8]).capitalize()) 
+        + "<b>Sunrise</b>: " + str(weatherData[6])[11:][:5] + "\n"
+        + "<b>Sunset</b>: " + str(weatherData[7])[11:][:5] + "\n\n"
+        + "<b>" + str(weatherData[8]).capitalize() + "<b>") 
 
     
 
