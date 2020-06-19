@@ -77,6 +77,10 @@ A telegram bot, running on Raspberry Pi (Raspbian Pi OS).
 
 ```/imdb + movie name``` - search for movie on IMDb
 
+### Weather
+
+```/w + city name``` - show current weather and additional relevant information 
+
 ### File System
 
 ```/ls``` - list available file system directories
@@ -128,8 +132,8 @@ A telegram bot, running on Raspberry Pi (Raspbian Pi OS).
 - [spotipy](https://github.com/plamere/spotipy)
 - [DuckDuckGo2](https://pypi.org/project/DuckDuckGo-Python3-Library/)
 - [IMDbpy](https://github.com/alberanid/imdbpy)
+- [Weather](https://openweathermap.org/api)
 - [Strava](https://developers.strava.com/docs/reference/) - to be added
-- [Weather](https://openweathermap.org/api) - to be added
 - pymongo + dnspython
 - mpv
 - pulseaudio

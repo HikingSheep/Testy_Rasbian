@@ -508,10 +508,14 @@ def weather(update, context):
         update.message.reply_text("City Not Found")
     else:
         update.message.reply_sticker('CAACAgIAAxkBAAIJ9l7qpUCvzZVRWaWd1y0VMvVOJLV_AAIwAQACpkRICxFy70LZy4AdGgQ')
-        update.message.reply_text("\U0001F321 " + str(weatherData[1]) + " C" + "\n"
-        + "\U0001F32B " + str(weatherData[0]) + " %" + "\n"
-        + "\U0001F32C " +str(weatherData[3]) + " m/s" + "\n\n"
-        + str(weatherData[2])) 
+        update.message.reply_html(str(weatherData[0]) + ", " + str(weatherData[1]) + "\n\n"
+        + "<b>Temperature</b>: " + str(weatherData[2]) + " C" + "\n"
+        + "<b>Feels like</b>: " + str(weatherData[3]) + " C" + "\n"
+        + "<b>Humidity</b>: " + str(weatherData[4]) + " %" + "\n"
+        + "<b>Wind</b>: " + str(weatherData[5]) + " m/s" + "\n"
+        + "<b>Sunrise</b>: " + str(weatherData[6])[11:] + "\n"
+        + "<b>Sunset</b>: " + str(weatherData[7])[11:] + "\n\n"
+        + str(weatherData[8]).capitalize()) 
 
     
 
